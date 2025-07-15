@@ -260,25 +260,24 @@ class EntertainmentResource extends Resource
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('title')
-                    ->label('العنوان')
-                    ->formatStateUsing(function ($record) {
-                        $translations = $record->getTranslations('title');
-
-                        $ar = $translations['ar'] ?? '';
-                        $en = $translations['en'] ?? '';
-
-                        if ($ar && $en) {
-                            return "{$ar} ({$en})";
-                        }
-
-                        return $ar ?: $en ?: '—';
-                    })
+                    ->label('نوع الوسيط')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('title_text')
+                    ->label('العنوان')
+                    ->searchable(
+                        query: fn ($query, $search) =>
+                        $query->where(function ($q) use ($search) {
+                            $q->whereRaw("LOWER(JSON_UNQUOTE(JSON_EXTRACT(title, '$.ar'))) LIKE ?", ['%' . strtolower($search) . '%'])
+                                ->orWhereRaw("LOWER(JSON_UNQUOTE(JSON_EXTRACT(title, '$.en'))) LIKE ?", ['%' . strtolower($search) . '%']);
+                        })
+                    )
                     ->wrap() // للسماح بلف النص في العمود
                     ->tooltip(function ($record) {
                         $translations = $record->getTranslations('title');
                         return implode(' / ', array_filter($translations));
-                    }),
+                    }) ,
 
 
                 TextColumn::make('overview')

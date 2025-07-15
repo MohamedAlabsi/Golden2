@@ -81,4 +81,12 @@ class Entertainment extends Model
     {
         return $this->belongsTo(Category::class, 'media_type_id');
     }
+    public function getTitleTextAttribute(): string
+    {
+        $ar = $this->getTranslation('title', 'ar') ?? '';
+        $en = $this->getTranslation('title', 'en') ?? '';
+
+        return trim($ar . ' | ' . $en);
+    }
+
 }
