@@ -1,0 +1,17 @@
+.custom-image {
+    width: 200px;
+    height: 200px;
+}
+
+.overview-tooltip div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px; /* عرض الخلية */
+}
+
+.overview-tooltip div:hover {
+    white-space: normal;
+    overflow: visible;
+    max-width: none;
+}
